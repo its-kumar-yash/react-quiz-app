@@ -1,7 +1,7 @@
 import { useGobalContext } from "./context";
 import Form from "./components/Form";
-import Loading from "./Components/Loading";
 import Modal from "./components/Modal";
+import Loading from "./components/Loading";
 
 function App() {
   const { waiting, loading, index, questions, nextQuestion, checkAnswer } =
@@ -33,7 +33,7 @@ function App() {
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center">
+    <main className="min-h-screen flex justify-center items-center">
       <Modal />
       <div className="p-3 py-5 md:p-8 bg-white shadow rounded-lg max-w-[800px] w-11/12 min-h-[300px]">
         <p className="text-right pb-2 text-green-600">

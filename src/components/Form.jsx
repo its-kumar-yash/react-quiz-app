@@ -68,7 +68,7 @@ const Form = () => {
             name="type"
             className="bg-gray-200 p-2 rounded-md outline-0 focus:bg-gray-300"
             value={quiz.type}
-            onChange={handleChange}
+            onChange={changeHandler}
           >
             <option value="multiple">multiple choice</option>
             <option value="boolean">true or false</option>

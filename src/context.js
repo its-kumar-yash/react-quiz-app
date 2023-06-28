@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { createContext, useContext, useState } from "react";
 import axios from "axios";
 //Promise based HTTP client for the browser and node.js
 
@@ -25,15 +25,13 @@ const AppProvider = ({ children }) => {
     type: "boolean",
   });
 
-  //api request
   const fetchApi = async (url) => {
-    setWaiting(true);
+    setWaiting(false);
     setLoading(true);
-
     try {
       const response = await axios.get(url);
       if (response) {
-        const data = response.data.result;
+        const data = response.data.results;
         if (data.length > 0) {
           setQuestions(data);
           setLoading(false);
@@ -50,74 +48,72 @@ const AppProvider = ({ children }) => {
       console.error(error);
     }
   };
-};
 
-const nextQuestion = () => {
-  setIndex((prevIndex) => {
-    if (prevIndex === questions.length - 1) {
-      openModal();
-      return questions.length - 1;
-    } else {
-      return prevIndex + 1;
+  const nextQuestion = () => {
+    setIndex((prevIndex) => {
+      if (prevIndex === questions.length - 1) {
+        openModal();
+        return questions.length - 1;
+      } else {
+        return prevIndex + 1;
+      }
+    });
+  };
+
+  const checkAnswer = (value) => {
+    if (value) {
+      setCorrect((prev) => prev + 1);
     }
-  });
-};
+    nextQuestion();
+  };
 
-const checkAnswer = (value) => {
-  if (value) {
-    setCorrect((prev) => prev + 1);
-  }
-  nextQuestion();
-};
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
 
-const openModal = () => {
-  setIsModalOpen(true);
-};
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setIndex(0);
+    setCorrect(0);
+    setWaiting(true);
+  };
 
-const closeModal = () => {
-  setIsModalOpen(false);
-  setIndex(0);
-  setCorrect(0);
-  setWaiting(true);
-};
+  const handleChange = (e) => {
+    const { value, name } = e.target;
+    setQuiz({ ...quiz, [name]: value });
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const { amount, category, difficulty, type } = quiz;
+    let url = `${API_ENDPOINT}amount=${amount}&category=${table[category]}&difficulty=${difficulty}&type=${type}`;
+    fetchApi(url);
+  };
 
-const changeHandler = (e) => {
-  const { value, name } = e.target;
-  setQuiz({ ...quiz, [name]: value });
+  return (
+    <AppContext.Provider
+      value={{
+        waiting,
+        loading,
+        index,
+        questions,
+        error,
+        correct,
+        nextQuestion,
+        checkAnswer,
+        isModalOpen,
+        closeModal,
+        quiz,
+        handleChange,
+        handleSubmit,
+      }}
+    >
+      {children}
+    </AppContext.Provider>
+  );
 };
-
-const submitHandler = (e) => {
-  e.preventDefault();
-  const { amount, category, difficulty, type } = quiz;
-  let url = `${API_ENDPOINT}amount=${amount}&category=${table[category]}&difficulty=${difficulty}&type=${type}`;
-  fetchApi(url);
-};
-
-return (
-  <AppContext.Provider
-    value={{
-      waiting,
-      loading,
-      index,
-      questions,
-      error,
-      correct,
-      nextQuestion,
-      checkAnswer,
-      checkAnswer,
-      isModalOpen,
-      closeModal,
-      quiz,
-      changeHandler,
-      submitHandler,
-    }}
-  >
-    {children}
-  </AppContext.Provider>
-);
 
 export default AppProvider;
 
 export const useGobalContext = () => {
   return useContext(AppContext);
-}
+};
