@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import axios from "axios";
 //Promise based HTTP client for the browser and node.js
 
@@ -115,3 +115,9 @@ return (
     {children}
   </AppContext.Provider>
 );
+
+export default AppProvider;
+
+export const useGobalContext = () => {
+  return useContext(AppContext);
+}
