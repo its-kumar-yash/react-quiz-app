@@ -2,7 +2,12 @@ import React, { createContext, useContext, useState } from "react";
 import axios from "axios";
 //Promise based HTTP client for the browser and node.js
 
-const table = { sports: 21, history: 23, politics: 24, science: 18 };
+const table = { 
+  sports: 21, 
+  history: 23, 
+  politics: 24, 
+  science: 18 
+};
 
 //Api Used for questions
 const API_ENDPOINT = "https://opentdb.com/api.php?";
@@ -32,6 +37,7 @@ const AppProvider = ({ children }) => {
       const response = await axios.get(url);
       if (response) {
         const data = response.data.results;
+        console.log(data);
         if (data.length > 0) {
           setQuestions(data);
           setLoading(false);
@@ -78,11 +84,11 @@ const AppProvider = ({ children }) => {
     setWaiting(true);
   };
 
-  const handleChange = (e) => {
+  const changeHandler = (e) => {
     const { value, name } = e.target;
     setQuiz({ ...quiz, [name]: value });
   };
-  const handleSubmit = (e) => {
+  const submitHandler = (e) => {
     e.preventDefault();
     const { amount, category, difficulty, type } = quiz;
     let url = `${API_ENDPOINT}amount=${amount}&category=${table[category]}&difficulty=${difficulty}&type=${type}`;
@@ -103,8 +109,8 @@ const AppProvider = ({ children }) => {
         isModalOpen,
         closeModal,
         quiz,
-        handleChange,
-        handleSubmit,
+        changeHandler,
+        submitHandler,
       }}
     >
       {children}
@@ -114,6 +120,6 @@ const AppProvider = ({ children }) => {
 
 export default AppProvider;
 
-export const useGobalContext = () => {
+export const useGlobalContext = () => {
   return useContext(AppContext);
 };

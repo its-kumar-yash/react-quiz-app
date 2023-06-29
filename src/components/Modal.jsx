@@ -1,9 +1,8 @@
-import react from "react";
-import { useGobalContext } from "../context";
+import { useGlobalContext } from "../context";
 import Confetti from "react-confetti";
 
 const Modal = () => {
-  const { closeModal, isModalOpen, correct, questions } = useGobalContext();
+  const { closeModal, isModalOpen, correct, questions } = useGlobalContext();
   let score = ((correct / questions.length) * 100).toFixed(0);
 
   return (
@@ -21,7 +20,7 @@ const Modal = () => {
             <p className="py-2">
               You got {correct}/{questions.length}
             </p>
-            {score > 40 && <p className="py-2 font-medium">Congrats!!!</p>}
+            {(score > 40) && <p className="py-2 font-medium">Congrats!!!</p>}
             <button
               className="bg-yellow-600 py-2 px-7 rounded-xl text-white mt-2 hover:bg-yellow-500"
               onClick={closeModal}

@@ -1,11 +1,11 @@
 import React from "react";
-import { useGobalContext } from "../context";
+import { useGlobalContext } from "../context";
 
 const Form = () => {
-  const { quiz, submitHandler, changeHandler, error } = useGobalContext();
+  const { quiz, submitHandler, changeHandler, error } = useGlobalContext();
 
   return (
-    <div className="bg-white flex items-center min-h-screen ">
+    <div className="justify-center flex items-center min-h-screen ">
       <form
         onSubmit={submitHandler}
         className=" bg-white p-5 md:p-8 max-w-[500px] space-y-8 shadow rounded-lg w-11/12 "
